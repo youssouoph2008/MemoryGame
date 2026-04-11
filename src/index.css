@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #0a0a0a;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Estilos personalizados para el juego */
+.card {
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  transform: scale(1.08) rotate(2deg);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3);
+}

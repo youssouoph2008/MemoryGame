@@ -1,6 +1,6 @@
 // src/components/GameBoard.jsx
 
-import Card from './Card';
+import Card from "./card";
 
 export default function GameBoard({ cards, onCardClick }) {
   return (
