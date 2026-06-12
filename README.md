@@ -4,18 +4,6 @@ A simple memory game built with **React** using hooks, API fetching, and state m
 
 ---
 
-## 🚀 Live Demo
-
-(Add your deployed link here)
-
----
-
-## 📸 Preview
-
-(Add screenshot here)
-
----
-
 ## 🎮 How It Works
 
 * Click cards to earn points
