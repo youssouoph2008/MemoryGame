@@ -1,15 +1,22 @@
 // src/App.jsx
-import { useState, useEffect } from 'react';
-import Header from "./components/header";
-import GameBoard from "./components/gameboard";
+import { useState, useEffect } from "react";
+import Header from "./components/header.jsx";
+import GameBoard from "./components/gameboard.jsx";
 
 export default function App() {
   const [cards, setCards] = useState([]);
-  const [clickedCards, setClickedCards] = useState(new Set());
+  const [clickedCards, setClickedCards] = useState([]);
   const [currentScore, setCurrentScore] = useState(0);
   const [bestScore, setBestScore] = useState(0);
   const [loading, setLoading] = useState(true);
   const [gameOver, setGameOver] = useState(false);
+
+  const resetGame = () => {
+    setClickedCards([]);
+    setCurrentScore(0);
+    setGameOver(false);
+    fetchCards();
+  }
 
   // Función para barajar las cartas (Fisher-Yates)
   const shuffle = (array) => {
@@ -35,7 +42,7 @@ export default function App() {
           id: detail.id,
           name: detail.name,
           image: detail.sprites.other['official-artwork'].front_default || 
-                 detail.sprites.front_default,
+                detail.sprites.front_default,
         };
       });
 
@@ -57,38 +64,46 @@ export default function App() {
 
   // Función que se ejecuta cuando el usuario hace clic en una carta
   const handleCardClick = (id) => {
-    if (clickedCards.has(id)) {
-      // ¡Perdiste!
-      if (currentScore > bestScore) {
-        setBestScore(currentScore);
-      }
+    if (gameOver) return;
+
+    if (clickedCards.includes(id)) {
       setGameOver(true);
-    } else {
-      // Click correcto
-      const newClicked = new Set(clickedCards);
-      newClicked.add(id);
-      setClickedCards(newClicked);
-      setCurrentScore((prev) => prev + 1);
 
-      // Barajar las cartas después de cada clic correcto
-      setCards((prevCards) => shuffle(prevCards));
+      setBestScore((prev) =>
+        currentScore > prev ? currentScore : prev
+      );
+
+      return;
     }
+
+    const newClicked = [...clickedCards, id];
+    setClickedCards(newClicked);
+
+    const newScore = currentScore + 1;
+    setCurrentScore(newScore);
+
+    setBestScore((prev) =>
+      newScore > prev ? newScore : prev
+    );
+
+    const won = newClicked.length === cards.length;
+    if (won) {
+      setGameOver(true);
+      return;
+    }
+
+  setCards((prevCards) => shuffle(prevCards));
   };
 
-  // Función para reiniciar el juego
-  const resetGame = () => {
-    setClickedCards(new Set());
-    setCurrentScore(0);
-    setGameOver(false);
-    setCards((prevCards) => shuffle(prevCards));
-  };
 
-  // Actualizar Best Score automáticamente
-  useEffect(() => {
-    if (currentScore > bestScore) {
-      setBestScore(currentScore);
-    }
-  }, [currentScore]);
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-white">
+        Loading...
+      </div>
+    );
+  }
+  
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
@@ -125,4 +140,5 @@ export default function App() {
   );
 }
 
-App = App();
+
+
